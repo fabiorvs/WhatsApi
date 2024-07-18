@@ -7,15 +7,40 @@ const path = require("path");
 let qrCode = null;
 let isClientReady = false;
 
-const sessionPath = path.join(__dirname, "..", ".wwebjs_auth/session");
+const sessionPath = path.join(
+  __dirname,
+  "..",
+  ".wwebjs_auth/session-client-one"
+);
+
+// Função para limpar o diretório
+const clearDirectory = (directory) => {
+  fs.readdir(directory, (err, files) => {
+    if (err) throw err;
+    for (const file of files) {
+      const filePath = path.join(directory, file);
+      fs.stat(filePath, (err, stats) => {
+        if (err) throw err;
+        if (stats.isDirectory()) {
+          clearDirectory(filePath);
+        } else {
+          fs.unlink(filePath, (err) => {
+            if (err) throw err;
+          });
+        }
+      });
+    }
+  });
+};
 
 const clearSession = () => {
   if (fs.existsSync(sessionPath)) {
-    fs.rmSync(sessionPath, { recursive: true, force: true });
+    clearDirectory(sessionPath);
     console.log("Session directory cleared");
   }
 };
 
+// Inicializa o cliente WhatsApp com autenticação local
 const client = new Client({
   authStrategy: new LocalAuth({ clientId: "client-one" }),
 });
@@ -29,15 +54,19 @@ client.on("qr", (qr) => {
 client.on("ready", () => {
   console.log("Client is ready!");
   isClientReady = true;
-  qrCode = null;
+  qrCode = null; // Limpa o QR code quando o cliente está pronto
 });
 
 client.on("disconnected", (reason) => {
   console.log("Client was logged out", reason);
   isClientReady = false;
-  clearSession();
+  clearSession(); // Limpa a sessão quando o cliente é desconectado
 });
 
+// Limpa o diretório IndexedDB antes de inicializar
+clearSession();
+
+// Inicializa o cliente WhatsApp
 client.initialize();
 
 const getQrCode = async () => {

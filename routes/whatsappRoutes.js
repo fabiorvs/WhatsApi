@@ -58,4 +58,9 @@ router.get("/qrcode", authenticateJWT, async (req, res) => {
   }
 });
 
+router.get("/check-connection", authenticateJWT, async (req, res) => {
+  const isClientReady = whatsappService.getClientStatus();
+  res.status(200).json({ isClientReady });
+});
+
 module.exports = router;
