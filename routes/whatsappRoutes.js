@@ -14,7 +14,7 @@ router.post('/send-message', authenticateJWT, async (req, res) => {
     }
 });
 
-router.get('/status', authenticateJWT, async (req, res) => {
+router.get('/status', async (req, res) => {
     if (whatsappService.getClientStatus()) {
         res.status(200).json({ status: 'up', message: 'Client is ready!' });
     } else {
