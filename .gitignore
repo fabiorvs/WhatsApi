@@ -43,3 +43,5 @@ bower_components/
 
 # Mac system files
 .DS_Store
+
+.wwebjs_auth

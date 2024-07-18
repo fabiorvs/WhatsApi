@@ -2,6 +2,11 @@
   "name": "whats-api",
   "version": "1.0.0",
   "description": "API Whatsapp",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
   "dependencies": {
     "axios": "^1.5.0",
     "bcrypt": "^5.1.1",
@@ -23,6 +28,7 @@
     "eslint-plugin-n": "^15.7.0",
     "eslint-plugin-promise": "^6.1.1",
     "jest": "^29.5.0",
+    "nodemon": "^3.1.4",
     "supertest": "^6.3.3",
     "swagger-autogen": "^2.23.1"
   },
